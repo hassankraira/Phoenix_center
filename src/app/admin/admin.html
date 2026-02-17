@@ -1,0 +1,81 @@
+<div class="min-h-screen text-white bg-[#0f0f0f] flex font-sans overflow-hidden">
+  <img src="home2.png" 
+  class="absolute top-30 inset-0 w-full h-full object-cover opacity-30 pointer-events-none z-0" />
+
+  @if (isMenuOpen()) {
+  <aside
+    [style.width]="isMenuOpen() ? '400px' : '0px'"
+    [class.opacity-0]="!isMenuOpen()"
+    class="bg-[#161616] border-r  h-[100hv] border-yellow-500/10 flex flex-col transition-all 
+    duration-300 ease-in-out relative z-[100]"
+  >
+    <div class="w-[400px] flex flex-col h-[100hv] p-6">
+      
+      <div class="flex  justify-end mb-6">
+        <button  (click)="isMenuOpen.set(false)" class="cursor-pointer p-2 text-yellow-500 hover:bg-yellow-500/10 rounded-full transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="text-center mb-10">
+        <img [src]="user().image" class="w-20 h-20 mx-auto rounded-full border-2 border-yellow-500/20 shadow-xl mb-4" />
+        <h3 class="font-bold text-yellow-500 uppercase tracking-wide">{{ user().firstName }}</h3>
+      </div>
+
+      <nav class="space-y-2 flex-1">
+        <a  routerLink="teachers" (click)="isMenuOpen.set(false)" routerLinkActive="bg-yellow-500 !text-black shadow-lg shadow-yellow-500/20" 
+           class="flex items-center px-4 py-3 rounded-xl text-gray-400 font-medium hover:bg-yellow-500/5 hover:text-yellow-500 transition-all">
+          المدرسين
+        </a>
+        <a routerLink="students" (click)="isMenuOpen.set(false)" routerLinkActive="bg-yellow-500 !text-black shadow-lg shadow-yellow-500/20" 
+           class="flex items-center px-4 py-3 rounded-xl text-gray-400 font-medium hover:bg-yellow-500/5 hover:text-yellow-500 transition-all">
+          الطلاب
+        </a>
+        <a routerLink="groups" (click)="isMenuOpen.set(false)" routerLinkActive="bg-yellow-500 !text-black shadow-lg shadow-yellow-500/20" 
+           class="flex items-center px-4 py-3 rounded-xl text-gray-400 font-medium hover:bg-yellow-500/5 hover:text-yellow-500 transition-all">
+          المجموعات
+        </a>
+        <a routerLink="classrooms" (click)="isMenuOpen.set(false)" routerLinkActive="bg-yellow-500 !text-black shadow-lg shadow-yellow-500/20" 
+           class="flex items-center px-4 py-3 rounded-xl text-gray-400 font-medium hover:bg-yellow-500/5 hover:text-yellow-500 transition-all">
+          القاعات
+        </a>
+        <a routerLink="schedules" (click)="isMenuOpen.set(false)" routerLinkActive="bg-yellow-500 !text-black shadow-lg shadow-yellow-500/20" 
+           class="flex items-center px-4 py-3 rounded-xl text-gray-400 font-medium hover:bg-yellow-500/5 hover:text-yellow-500 transition-all">
+          الجدول
+        </a>
+        <a routerLink="student finance" (click)="isMenuOpen.set(false)" routerLinkActive="bg-yellow-500 !text-black shadow-lg shadow-yellow-500/20" 
+        class="flex items-center px-4 py-3 rounded-xl text-gray-400 font-medium hover:bg-yellow-500/5 hover:text-yellow-500 transition-all">
+       إدارة المالية
+     </a>
+      </nav>
+
+      <button (click)="logout()" (click)="isMenuOpen.set(false)" class="mt-10 md:mt-auto py-3 cursor-pointer text-red-500 hover:bg-red-500/10 rounded-xl border border-red-500/10 font-bold">
+        تسجيل الخروج
+      </button>
+      <br>
+      <button routerLink="/Change Password" (click)="isMenuOpen.set(false)" class="mt-10 md:mt-auto py-3 cursor-pointer text-yellow-500 hover:bg-yellow-500/10 rounded-xl border border-yellow-500/10 font-bold">
+        تغير كلمة المرور
+      </button>
+    </div>
+  </aside>
+}
+  @if (!isMenuOpen()) {
+    <div class="absolute cursor-pointer top-16 right-0 z-[110]">
+      <button (click)="isMenuOpen.set(true)" 
+              class="p-3 cursor-pointer bg-[#161616] text-yellow-500 border border-yellow-500/20 rounded-xl shadow-2xl hover:scale-110 transition-all active:scale-95">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+        </svg>
+      </button>
+    </div>
+  }
+
+  <main class="flex-1 overflow-y-auto p-6 md:p-12 relative">
+    <div class="max-w-7xl mx-auto">
+      <router-outlet></router-outlet>
+    </div>
+  </main>
+
+</div>

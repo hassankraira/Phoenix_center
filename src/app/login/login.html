@@ -1,0 +1,74 @@
+<section class="body">
+  <div class="login-container">
+    <div class="logo">
+      <img class="w-[20%]" src="logo.svg" alt="">
+      <span>فينيكس</span>
+    </div>
+
+    <h1>تسجيل الدخول</h1>
+    <div class="subtitle">مرحبًا بعودتك، من فضلك أدخل بياناتك</div>
+
+    <form (ngSubmit)="logIN()" #signupForm="ngForm">
+      <div class="field">
+        <label>إسم المستخدم</label>
+        <input [(ngModel)]="user.Username" name="Username"  type="text" dir="rtl" placeholder="إسم المستخدم" required />
+      </div>
+
+      <div class="field password-field">
+        <label>كلمة المرور</label>
+        <div class="password-wrapper">
+          <input
+            [(ngModel)]="user.password"
+            name="password"
+            [type]="hidePassword ? 'password' : 'text'"
+            placeholder="**********"
+            required
+          />
+          <button
+            type="button"
+            class="toggle-password"
+            (click)="togglePassword()"
+            [attr.aria-label]="hidePassword ? 'إظهار كلمة المرور' : 'إخفاء كلمة المرور'"
+          >
+            {{ hidePassword ? '🫣' : '👁️' }}
+          </button>
+        </div>
+      </div>
+
+      <div class="options">
+        <div></div>
+        <a href="#">نسيت كلمة المرور؟</a>
+      </div>
+
+      <button class="btn" type="submit">دخول</button>
+    </form>
+  </div>
+
+  <!-- Pop-up لرسالة الخطأ خارج الفورم -->
+  @if(showErrorPopup()){
+    <div
+      class="fixed top-15 right-[42%] bg-red-600 text-white px-6 py-4 rounded-lg shadow-lg flex items-center space-x-3 animate-fadeIn"
+    >
+      <span>{{ loginError() }}</span>
+      <button 
+        (click)="showErrorPopup.set(false);"
+        class="ml-4 text-white font-bold hover:text-gray-200"
+      >
+        ✖
+      </button>
+    </div>
+  }
+      <!-- Loading -->
+      @if (loading()) {
+        <div class="loading-overlay">
+          <div class="loading-ring">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <p class="loading-text">جاري تسجيل الدخول...</p>
+        </div>
+      }
+      
+</section>

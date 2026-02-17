@@ -1,0 +1,166 @@
+<nav dir="rtl"
+     class="w-full bg-[#111]
+     shadow-[0_4px_20px_rgba(255,188,17,0.30)]
+     z-100000 sticky top-0
+     ">
+
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="flex items-center justify-between h-16">
+
+      <!-- Logo -->
+      <div routerLink="/Home" class="flex cursor-pointer items-center gap-3">
+        <img src="logo.svg"
+             class="w-12 object-contain"
+             alt="Logo">
+        <span class="text-[#ffbc13] text-[16px]">فينيكس</span>
+      </div>
+
+      <!-- Desktop Links -->
+      <ul class="hidden md:flex items-center gap-8 text-[16px] font-medium">
+        <li>
+          <a
+          routerLink="/Home"
+          [class.active]="currentRoute.includes('/Home')"
+          class="nav-link text-gray-200 hover:text-[#ffbc13] transition nav-link relative pb-2 transition hover:after:w-full active:text-[#ffbc13]"
+
+        >
+          الصفحة الرئيسية
+        </a>
+        
+        </li>
+        <li>
+          <a routerLink="/Teachers"
+             [class.active]="this.currentRoute.includes('/Teachers')"
+             class="nav-link text-gray-200 hover:text-[#ffbc13] transition nav-link relative pb-2 transition hover:after:w-full active:text-[#ffbc13]"
+             >
+             المدرسون
+          </a>
+        </li>
+        <li>
+          <a routerLink="/About Phoenix"
+             [class.active]="this.currentRoute.includes('/About')"
+             class="nav-link text-gray-200 hover:text-[#ffbc13] transition nav-link relative pb-2 transition hover:after:w-full active:text-[#ffbc13]"
+             >
+            من نحن
+          </a>
+        </li>
+        <li>
+          <a routerLink="/Contact"
+             [class.active]="this.currentRoute.includes('/Contact')"
+             class="nav-link text-gray-200 hover:text-[#ffbc13] transition nav-link relative pb-2 transition hover:after:w-full active:text-[#ffbc13]"
+             >
+            تواصل معنا
+          </a>
+        </li>
+      </ul>
+
+      <!-- Desktop Login -->
+      @if(!user()){
+      <a routerLink="/Login"
+         class="hidden md:flex items-center justify-center
+                h-9 px-6 rounded-full
+                bg-[#ffbc13] text-[#1f1f1f]
+                text-sm font-semibold
+                transition-all duration-300
+                hover:scale-105">
+        تسجيل الدخول
+      </a>
+    }@else {
+      <a class="hidden md:block text-white font-semibold cursor-pointer "  (click)="goToDashboard()">
+        مرحبًا    <span class="text-[#ffbc13] text-lg font-semibold cursor-pointer"  (click)="goToDashboard()">{{user()?.firstName }}</span>
+      </a>
+    }
+      <!-- Mobile Menu Button -->
+  <button type="button"
+        (click)="toggleMenu()"
+        class="md:hidden cursor-pointer text-[#ffbc13] z-50 relative">
+        <svg class="w-7 h-7" fill="none" stroke="currentColor"
+        stroke-width="2" viewBox="0 0 24 24">
+     <path stroke-linecap="round" stroke-linejoin="round"
+           d="M4 6h16M4 12h16M4 18h16"/>
+   </svg>
+</button>
+
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <aside
+  class="fixed top-0 right-0 h-full w-64
+         bg-[#111] z-50
+         transform transition-transform duration-300
+         md:hidden"
+  [class.translate-x-0]="isMenuOpen"
+  [class.translate-x-full]="!isMenuOpen">
+
+  <!-- Header -->
+  <div class="flex items-center justify-between p-4 border-b border-[#ffbc13]/20">
+    <img src="logo.svg"
+    class="w-12 object-contain"
+    alt="Logo">
+        <span class="text-[#ffbc13] text-lg font-semibold">فينيكس</span>
+    <button (click)="toggleMenu()" class="text-[#ffbc13] text-xl">✕</button>
+  </div>
+
+  <!-- Links -->
+  <ul class="flex flex-col gap-4 p-6 text-[16px]">
+    <li>
+      <a routerLink="/Home"
+         (click)="toggleMenu()"
+         [class.active]="this.currentRoute.includes('/Home')"
+         class="text-gray-200 hover:text-[#ffbc13]">
+        الصفحة الرئيسية
+      </a>
+    </li>
+
+    <li>
+      <a routerLink="/Teachers"
+         (click)="toggleMenu()"
+         [class.active]="this.currentRoute.includes('/Teachers')"
+         class="text-gray-200 hover:text-[#ffbc13]">
+        المدرسين
+      </a>
+    </li>
+
+    <li>
+      <a routerLink="/About Phoenix"
+         (click)="toggleMenu()"
+         [class.active]="this.currentRoute.includes('/About')"
+         class="text-gray-200 hover:text-[#ffbc13]">
+        من نحن
+      </a>
+    </li>
+
+    <li>
+      <a routerLink="/Contact"
+         (click)="toggleMenu()"
+         [class.active]="this.currentRoute.includes('/Contact')"
+         class="text-gray-200 hover:text-[#ffbc13]">
+        تواصل معنا
+      </a>
+    </li>
+      <a routerLink="/Login"
+         (click)="toggleMenu()"
+         class="mt-6 flex items-center justify-center
+                h-9 rounded-full
+                bg-[#ffbc13] text-[#1f1f1f]
+                font-semibold"
+                [hidden]="user()">
+
+        تسجيل الدخول
+      </a>
+      <a class="mt-6 text-white font-semibold cursor-pointer" (click)="toggleMenu()"  (click)="goToDashboard()"   [hidden]="!user()">
+
+         مرحبًا    <span class="text-[#ffbc13] text-lg font-semibold cursor-pointer"  (click)="goToDashboard()">{{"    "+user()?.firstName }}</span>
+      </a>
+    
+    
+  </ul>
+
+</aside>
+
+
+</nav>
+
+<router-outlet></router-outlet>
+<app-footer></app-footer>

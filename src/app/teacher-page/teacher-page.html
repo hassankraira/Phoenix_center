@@ -1,0 +1,301 @@
+<div class="max-w-7xl mx-auto px-4 py-8" dir="rtl">
+    <header class="md:flex items-start  md:flex-row md:items-center md:justify-between gap-6 mb-10">
+        <div class="flex items-center gap-4">
+          <div class="text-center mb-10 relative">
+  
+            <label class="cursor-pointer group">
+              <img
+                [src]="user().image || 'teacher1.png'"
+                class="w-20 h-20 mx-auto rounded-full border-2 border-yellow-500/20 shadow-xl mb-2
+                       group-hover:opacity-70 transition"
+              />
+          
+              <!-- أيقونة تغيير -->
+              <div
+                class="absolute inset-0 flex items-center justify-center
+                       opacity-0 group-hover:opacity-100 transition"
+              >
+                <span class="bg-black/60 text-xs text-white px-3 py-1 rounded-lg">
+                  تغيير الصورة
+                </span>
+              </div>
+          
+              <input
+                type="file"
+                accept="image/*"
+                hidden
+                (change)="onImageSelected($event)"
+              />
+            </label>
+          
+          </div>
+          
+          <div>
+            <h2 class="text-2xl md:text-3xl font-extrabold text-white">
+              أهلاً، {{user().gender=="M"?" مستر":"مس "}} <span class="text-yellow-500">{{ user()?.firstName }}</span>  👋
+            </h2>
+            <p class="text-gray-400 flex items-center gap-2 mt-1">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+              {{ formattedDate() }}
+            </p>
+          </div>
+        </div>
+    <div class="flex flex-col gap-3">
+        <button (click)="logout()" class="group cursor-pointer flex justify-between items-center gap-2 px-6 py-3 bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white rounded-2xl transition-all duration-300 border border-red-500/20 font-bold">
+          <span>تسجيل الخروج</span>
+          <svg class="w-5 h-5 group-hover:translate-x-[-4px] transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+        </button>
+        <button routerLink="/Change Password"  class="mt-10 md:mt-auto py-3 cursor-pointer text-yellow-500 hover:bg-yellow-500/10 rounded-xl border border-yellow-500/10 font-bold">
+          تغير كلمة المرور
+        </button>
+      </div>
+      </header>
+      
+      <div class="grid grid-cols-2  gap-6 mb-10">
+        <div class="relative overflow-hidden bg-[#1e1e1e] p-6 rounded-3xl border border-white/5 hover:border-yellow-500/30 transition-colors group">
+          <div class="relative z-10">
+            <p class="text-gray-400 font-medium">عدد المجموعات</p>
+            <h4 class="text-4xl font-black text-white mt-2 group-hover:scale-110 transition-transform origin-right">{{ GroupsCount() }}</h4>
+          </div>
+          <div class="absolute -left-4 -bottom-4 text-yellow-500/10 opacity-20 group-hover:opacity-40 transition-opacity">
+            <svg class="w-24 h-24" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"></path></svg>
+          </div>
+        </div>
+        <div class="relative overflow-hidden bg-[#1e1e1e] p-6 rounded-3xl border border-white/5 hover:border-yellow-500/30 transition-colors group">
+          <div class="relative z-10">
+            <p class="text-gray-400 font-medium">عدد الطلاب في كل المجموعات</p>
+            <h4 class="text-4xl font-black text-white mt-2 group-hover:scale-110 transition-transform origin-right">{{ studentsTotal() }}</h4>
+          </div>
+          <div class="absolute -left-4 -bottom-4 text-yellow-500/10 opacity-20 group-hover:opacity-40 transition-opacity">
+            <svg class="w-24 h-24" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"></path></svg>
+          </div>
+        </div>
+    
+        <div class="relative overflow-hidden bg-[#1e1e1e] p-6 rounded-3xl border border-white/5 hover:border-yellow-500/30 transition-colors group">
+          <div class="relative z-10">
+            <p class="text-gray-400 font-medium">إجمالي حضور</p>
+          <h4 class="text-4xl font-black text-white mt-2 group-hover:scale-110 transition-transform origin-right">{{ daySummary().present }}</h4>
+          <div class="absolute -left-4 -bottom-4 text-blue-500/10 opacity-20">
+            <svg class="w-24 h-24" fill="currentColor" viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5s-3 1.34-3 3 1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"></path></svg>
+          </div>
+        </div>
+        </div>
+        <div class="relative overflow-hidden bg-[#1e1e1e] p-6 rounded-3xl border border-white/5">
+          <p class="text-gray-400 font-medium">حالات الغياب</p>
+          <h4 class="text-4xl font-black text-red-500 mt-2">{{ daySummary().absent }}</h4>
+          <div class="absolute -left-4 -bottom-4 text-red-500/10 opacity-20">
+            <svg class="w-24 h-24" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"></path></svg>
+          </div>
+        </div>
+      </div>
+    <!-- ===== Header اليوم ===== -->
+    <div class="flex items-center justify-between mb-8 bg-[#1e1e1e] p-6 rounded-3xl border border-white/5">
+  
+      <button
+        (click)="previousDay()"
+        class="px-4 py-2 rounded-xl cursor-pointer bg-white/5 hover:bg-yellow-500 hover:text-black transition font-bold">
+       ⟶السابق
+      </button>
+  
+      <div class="text-center">
+        <h2 class="text-xl md:text-2xl font-extrabold text-white">
+          {{ selectedDayLabel() }}
+        </h2>
+        <button
+          (click)="goToToday()"
+          class="text-xs mt-1 cursor-pointer text-yellow-500 hover:underline">
+          الرجوع لليوم
+        </button>
+      </div>
+  
+      <button
+        (click)="nextDay()" 
+        class="px-4 py-2 cursor-pointer rounded-xl bg-white/5 hover:bg-yellow-500 hover:text-black transition font-bold">
+        التالي⟵
+      </button>
+    </div>
+  
+    <!-- ===== المحتوى ===== -->
+    @if (loading()) {
+      <div class="flex justify-center items-center py-20">
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-yellow-500"></div>
+      </div>
+    }
+  
+    <!-- جدول المدرسين -->
+    @else {
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+  
+      <!-- ===== جدول اليوم ===== -->
+      <div class="lg:col-span-4 space-y-4 md:h-[75vh] overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+  
+        <h3 class="text-lg font-bold text-white mb-4">
+        مواعيد اليوم ({{ todaySessionsCount() }})
+        </h3>
+  
+        @if (todaySessions().length === 0) {
+          <div class="bg-[#1e1e1e] p-6 rounded-2xl text-center text-gray-500">
+            لا توجد حصص في هذا اليوم
+          </div>
+        } 
+        @else {
+          @for (session of todaySessions(); track session.schedule_id) {
+            <div
+              (click)="openSession(session)" 
+              [class.border-yellow-500]="activeSession()?.schedule_id === session.schedule_id"
+              class="cursor-pointer bg-[#1e1e1e] p-5 rounded-2xl border border-white/5 hover:bg-[#252525] transition">
+  
+              <div class="flex justify-between text-xs text-gray-400 mb-2">
+                <span>{{ session.start }} - {{ session.end }}</span>
+                <span>قاعة {{ session.room }}</span>
+              </div>
+  
+              <h4 class="text-white font-bold">
+                {{ session.group }}
+              </h4>
+            </div>
+          }
+          
+        }
+      </div>
+  
+      <!-- ===== تفاصيل الحصة ===== -->
+
+      <div class="lg:col-span-8">
+        
+        @if (loading2()) {
+              <div class="flex justify-center items-center py-20">
+                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-yellow-500"></div>
+              </div>
+            }
+       
+          
+            <!-- جدول المدرسين -->
+            @else {
+              @if (activeSession()) {
+                <div class="bg-[#1e1e1e] p-6 rounded-3xl border border-white/5">
+                
+                  <h3 class="text-xl font-bold text-white mb-6">
+                    {{ activeSession()?.group }} — إدارة الحضور و الغياب
+                  </h3>
+                
+                  @if (isSessionLocked()) {
+                  <div class="bg-blue-500/10 border border-blue-500/20 p-4 rounded-xl mb-6 flex items-center gap-3 animate-pulse">
+                    <svg class="w-6 h-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <p class="text-blue-200 text-sm">هذه الحصة لم تبدأ بعد. لا يمكن تسجيل الحضور أو التقييم حالياً.</p>
+                  </div>
+                  }
+                
+                  <div class="space-y-3">
+                    @for (student of activeSession()?.students; track student.id) {
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center bg-[#151515] p-4 rounded-2xl gap-4 border border-white/5 hover:border-white/10 transition"
+                         [class.opacity-50]="isSessionLocked()">
+                      
+                      <div class="flex-1">
+                        <span class="text-white font-medium text-lg block mb-1">{{ student.name }}</span>
+                        <div class="flex gap-1">
+                          @for (star of [1,2,3,4,5]; track star) {
+                          <button (click)="updateStudentRating(student.id, star)" 
+                                  [disabled]="isSessionLocked()"
+                                  class="transition-transform cursor-pointer active:scale-125 disabled:cursor-not-allowed">
+                            <svg [class.text-yellow-500]="(tempRatings()[student.id] || 0) >= star"
+                                 [class.text-gray-800]="(tempRatings()[student.id] || 0) < star"
+                                 class="w-5 h-5 fill-current transition-colors" viewBox="0 0 24 24">
+                              <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                          </button>
+                          }
+                        </div>
+                      </div>
+                
+                      <div class="flex gap-2">
+                        <button (click)="markAttendance(student.id, 'present')" 
+                                [disabled]="isSessionLocked()"
+                                class="px-4 py-2 rounded-xl text-xs cursor-pointer font-bold transition-all  disabled:cursor-not-allowed"
+                                [class.bg-green-500]="student.status === 'present'" 
+                                [class.text-white]="student.status === 'present'"
+                                [class.text-green-500]="student.status !== 'present'">
+                          حاضر
+                        </button>
+                
+                        <button (click)="markAttendance(student.id, 'late')" 
+                                [disabled]="isSessionLocked()"
+                                class="px-4 py-2 rounded-xl text-xs cursor-pointer font-bold transition-all   disabled:cursor-not-allowed"
+                                [class.bg-yellow-500]="student.status === 'late'" 
+                                [class.text-black]="student.status === 'late'"
+                                [class.text-yellow-500]="student.status !== 'late'">
+                          متأخر
+                        </button>
+                
+                        <button (click)="markAttendance(student.id, 'absent')" 
+                                [disabled]="isSessionLocked()"
+                                class="px-4 py-2 rounded-xl text-xs cursor-pointer font-bold transition-all  disabled:cursor-not-allowed"
+                                [class.bg-red-500]="student.status === 'absent'" 
+                                [class.text-white]="student.status === 'absent'"
+                                [class.text-red-500]="student.status !== 'absent'">
+                          غائب
+                        </button>
+                      </div>
+                    </div>
+                    }
+                  </div>
+                
+                  <div class="mt-10 pt-8 border-t border-white/5">
+                    <h4 class="text-white font-bold mb-4 flex items-center gap-2">ملاحظات سريعة</h4>
+                
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                      <select [value]="studentId()" (change)="studentId.set($any($event.target).value)"
+                              [disabled]="isSessionLocked()"
+                              class="md:col-span-1 bg-[#0f0f0f] border border-white/10 text-white rounded-xl px-4 py-3 disabled:opacity-50">
+                        <option value="">اختر الطالب</option>
+                        @for (student of activeSession()?.students; track student.id) {
+                        <option [value]="student.id">{{ student.name }}</option>
+                        }
+                      </select>
+                
+                      <input class="md:col-span-2 bg-[#0f0f0f] border border-white/10 text-white rounded-xl px-4 py-3 focus:ring-2 ring-yellow-500 outline-none disabled:opacity-50"
+                             [value]="noteText()" (input)="noteText.set($any($event.target).value)" 
+                             [disabled]="isSessionLocked()"
+                             placeholder="اكتب ملاحظة جديدة..." />
+                
+                      <button (click)="saveNote()" 
+                              [disabled]="isSessionLocked() || !studentId() || !noteText()"
+                              class="md:col-span-1 bg-yellow-500 hover:bg-yellow-400 disabled:bg-gray-700 text-black font-bold rounded-xl transition-all active:scale-95">
+                        حفظ
+                      </button>
+                    </div>
+                
+                    @if (sessionNotes().length > 0) {
+                    <div class="space-y-3 mt-6">
+                      @for (n of sessionNotes(); track $index) {
+                        @if (n.NOTE_TEXT !== 'تقييم سريع' && n.NOTE_TEXT !== 'تحديث تقييم') {
+                        <div class="bg-black/20 p-4 rounded-xl border-r-2 border-yellow-500 transition-all hover:bg-black/30">
+                          <div class="flex justify-between items-start">
+                            <p class="text-white font-bold text-xs mb-1">{{ n.STUDENT_NAME }}</p>
+                            <span class="text-[10px] text-gray-600 font-mono">{{ n.NOTE_DATE }}</span>
+                          </div>
+                          <p class="text-gray-400 text-sm mt-1 leading-relaxed">{{ n.NOTE_TEXT }}</p>
+                        </div>
+                        }
+                      }
+                    </div>
+                    }
+                  </div>
+                
+                </div>
+                }
+         @else {
+          <div class="h-full flex items-center justify-center bg-[#1e1e1e] rounded-3xl border border-dashed border-gray-700 p-12 text-gray-500">
+            👉  اختر حصة من جدول اليوم 
+          </div>
+       
+      }
+        } 
+   
+      </div>
+    </div>
+  }
+  </div>
+  

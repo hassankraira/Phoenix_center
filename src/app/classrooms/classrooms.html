@@ -1,0 +1,112 @@
+<section class="p-6 md:p-10 min-h-screen " dir="rtl">
+
+    <!-- العنوان -->
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+      <h1 class="text-2xl font-bold text-yellow-500">
+        القاعات
+      </h1>
+    </div>
+  
+    <h4 class="mb-6">
+      <span class="text-2xl font-bold text-yellow-500">عدد القاعات :</span>
+      <span class="text-2xl font-bold text-white ms-2">
+        {{ rooms().length }}
+      </span>
+    </h4>
+    @if (loading()) {
+        <div class="flex justify-center items-center py-20">
+          <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-yellow-500"></div>
+        </div>
+      }
+    
+      <!-- جدول المدرسين -->
+      @else {
+    <!-- جدول القاعات (Desktop) -->
+    <div class="overflow-x-auto rounded-xl shadow hidden md:block max-h-[61vh] overflow-y-auto">
+      <table class="min-w-full text-sm text-right">
+        <thead class="bg-[#FFC107] text-black">
+          <tr>
+            <th class="px-4 py-3">القاعة</th>
+            <th class="px-4 py-3">السعة</th>
+            <th class="px-4 py-3">الحالة</th>
+            <th class="px-4 py-3">ملاحظة</th>
+          </tr>
+        </thead>
+  
+        <tbody>
+          @for (room of rooms(); track room.Name) {
+            <tr class="border-b border-yellow-500 hover:bg-gray-800 transition-colors">
+  
+              <!-- الاسم -->
+              <td class="px-4 py-3 font-semibold flex items-center gap-2">
+                
+                {{ room.Name }}
+              </td>
+  
+              <!-- السعة -->
+              <td class="px-4 py-3">
+                {{ room.Capacity }}
+              </td>
+  
+      
+  
+              <!-- الحالة -->
+              <td class="px-4 py-3">
+                <span class="inline-block w-3 h-3 rounded-full mr-2"
+                      [class.bg-red-600]="room.Is_Occupied"
+                      [class.bg-green-600]="!room.Is_Occupied"></span>
+                {{ room.Is_Occupied ? 'مشغولة الآن' : 'فارغة' }}
+              </td>
+              
+              <td class="px-4 py-3 text-gray-400">
+                {{ room.Note || '—' }}
+              </td>
+              
+  
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  
+    <!-- Cards للموبايل -->
+    <div class="md:hidden space-y-4 w-full">
+  
+      @for (room of rooms(); track room.Name) {
+        <div class="bg-[#1f1f1f] rounded-xl p-4 shadow"
+        [class.border-red-500]="room.Is_Occupied"
+        [class.border-green-500]="!room.Is_Occupied"
+        [class.border-2]="true">  
+          <div class="flex justify-between items-center mb-3">
+            <h3 class="font-bold text-lg flex items-center gap-2">
+            
+              {{ room.Name }}
+            </h3>
+  
+            <span class="inline-flex items-center gap-1 text-xs px-2 py-1 rounded-full">
+                <span class="w-2 h-2 rounded-full"
+                      [class.bg-red-600]="room.Is_Occupied"
+                      [class.bg-green-600]="!room.Is_Occupied"></span>
+                {{ room.Is_Occupied ? 'مشغولة الآن' : 'فارغة الآن' }}
+              </span>
+              
+          </div>
+  
+          <div class="grid grid-cols-2 gap-2 text-sm text-gray-300 mb-2">
+            <div>👥 السعة: {{ room.Capacity }}</div>
+            
+          </div>
+  
+          @if (room.Note) {
+            <p class="text-xs text-gray-400 mt-2">
+              {{ room.Note }}
+            </p>
+          }
+  
+        </div>
+      }
+  
+    </div>
+}
+  </section>
+  

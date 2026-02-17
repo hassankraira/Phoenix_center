@@ -1,0 +1,90 @@
+.taa::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Firefox */
+  .taa {
+    scrollbar-width: none;
+  }
+  /* أضف هذا في ملف الـ CSS الخاص بالمكون */
+.overflow-x-auto {
+    cursor: grab;
+    user-select: none; /* منع تحديد النصوص أثناء السحب */
+  }
+  
+  .overflow-x-auto.active {
+    cursor: grabbing;
+  }
+  
+  /* إخفاء شريط السكرول ليكون الشكل أجمل (اختياري) */
+  .overflow-x-auto::-webkit-scrollbar {
+    display: none;
+  }
+  .overflow-x-auto {
+    -ms-overflow-style: none;
+  }
+  /* الحاوية الأساسية */
+#scrollContainer {
+    cursor: grab;
+    user-select: none; /* منع تحديد النصوص أثناء السحب المزعج */
+    scrollbar-width: none; /* إخفاء الشريط في فيرفوكس */
+    -ms-overflow-style: none; /* إخفاء الشريط في IE */
+}
+
+#scrollContainer::-webkit-scrollbar {
+    display: none; /* إخفاء الشريط في كروم وسفاري لجمال التصميم */
+}
+
+#scrollContainer.active {
+    cursor: grabbing;
+    scale: 0.995; /* تأثير بصري بسيط عند الضغط */
+    transition: scale 0.2s;
+}
+
+/* لضمان أن الأزرار داخل الجدول لا تتأثر بالسحب */
+button, .group-card {
+    cursor: pointer;
+}
+#scrollContainer {
+    /* منع التمرير اليدوي تماماً */
+    overflow-y: auto !important; 
+
+    /* منع اختيار النصوص أثناء السحب */
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-user-drag: none;
+
+    /* تحسين سلاسة الحركة */
+  
+    /* منع سحب العناصر كصور (مثل خلايا الجدول) */
+    
+    cursor: grab!important;
+  }
+  
+  #scrollContainer.active {
+    cursor: grabbing;
+  }
+  /* تأثير وميض بسيط لجذب الانتباه لليوم الحالي عند الفتح */
+@keyframes highlight-day {
+    0% { opacity: 0.5; }
+    100% { opacity: 1; }
+  }
+  
+  .today-highlight {
+    border: 3px solid #ffffff !important;
+    animation: highlight-day 1s ease-in-out;
+    position: relative;
+  }
+  
+  .today-highlight::after {
+    content: 'اليوم';
+    position: absolute;
+    top: -10px;
+    right: 50%;
+    transform: translateX(50%);
+    background: #ef4444;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 10px;
+  }

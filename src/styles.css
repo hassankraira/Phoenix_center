@@ -1,0 +1,42 @@
+/* You can add global styles to this file, and also import other style files */
+
+@import "tailwindcss";
+/* You can add global styles to this file, and also import other style files */
+
+@font-face {
+    font-family: 'ArabicDiwani';
+    src: url('/fonts/InkBrushArabic_DEMO-Textured.otf') format('opentype'),
+         url('/fonts/InkBrushArabic_DEMO-Textured.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: 'modhesh';
+    src: url('/fonts/hamdy-v3-bold.ttf') format('truetype'),
+         url('/fonts/hamdy-v3-bold.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+* {
+    font-family: 'modhesh', serif;
+    font-weight: 100;
+}
+body{
+    background: #0b0b0b;
+ 
+}
+body::-webkit-scrollbar {
+    display: none;
+    min-height: 100vh;
+
+}
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .no-scrollbar {
+    -ms-overflow-style: none;  /* IE / Edge */
+    scrollbar-width: none;     /* Firefox */
+  }

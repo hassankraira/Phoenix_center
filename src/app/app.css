@@ -1,0 +1,66 @@
+@font-face {
+    font-family: 'ArabicDiwani';
+    src: url('/InkBrushArabic_DEMO-Textured.otf') format('opentype'),
+         url('/InkBrushArabic_DEMO-Textured.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+.imgg {
+    /* التدرج اللوني الذي طلبته مع الأنيميشن */
+    background: linear-gradient(90deg,rgba(0, 0, 0, 1) 0%, rgba(255, 255, 255, 1) 50%, rgba(0, 0, 0, 1) 100%);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: fireGlow 3s ease infinite;
+    display: inline-block; /* ضروري لعمل الأنيميشن على النصوص */
+}
+
+.logo{
+    font-family: 'ArabicDiwani' !important;
+}
+@keyframes fireGlow {
+    0% { background-position: 0% 50%;  }
+    50% { background-position: 100% 50%;  }
+    100% { background-position: 0% 50%;  }
+}
+.active{
+  color:#ffbc13;
+}
+
+  
+
+  
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 0;
+    height: 2px;
+    background-color: #ffbc13;
+    border-radius: 9999px;
+    transition: width 0.3s ease;
+  }
+  
+  /* عند hover */
+  .nav-link:hover::after {
+    width: 100%;
+  }
+  
+  /* الصفحة النشطة */
+  .active {
+    color: #ffbc13;
+  }
+  
+  .active::after {
+    width: 100%;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .no-scrollbar {
+    -ms-overflow-style: none;  /* IE / Edge */
+    scrollbar-width: none;     /* Firefox */
+  }

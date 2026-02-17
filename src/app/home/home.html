@@ -1,0 +1,176 @@
+<div
+  class="flex flex-col-reverse bac md:flex-row flex-1 w-full items-center justify-between pb-20 px-5 md:px-16 bg-[#121212;] relative overflow-hidden"
+  style="min-height: 100vh;">
+
+  <!-- النص -->
+  <div class="z-10 w-full md:w-[50%] text-center md:text-right md:pr-26 mt-10 md:mt-0">
+    <h1 class="text-3xl md:text-5xl font-bold text-white mb-6 leading-tight">
+      حلّق بمستقبلك مع
+      <span class="text-[#FFC107]">فينيكس</span>
+    </h1>
+
+    <p class="text-gray-300 text-base md:text-xl mb-8 leading-relaxed">
+      المنصة التعليمية الأقوى التي تضع نخبة المدرسين بين يديك.
+      انطلق الآن في رحلة التميز وحقق أهدافك الأكاديمية بأحد ث التقنيات.
+    </p>
+
+    <div
+      class="flex flex-col sm:flex-row gap-4 justify-center md:justify-end">
+      <button
+        class="bg-[#FFC107]  cursor-pointer text-black px-8 py-3 rounded-full font-bold hover:bg-yellow-500 transition shadow-lg"
+       routerLink="/Teachers">
+        ابدأ رحلتك الآن
+      </button>
+
+      <button
+      routerLink="/About Phoenix"
+        class="border cursor-pointer border-[#FFC107] text-[#FFC107] px-8 py-3 rounded-full font-bold hover:bg-[#FFC107] hover:text-black transition">
+        
+        تعرف علينا
+      </button>
+    </div>
+  </div>
+
+  <!-- الصورة -->
+  <div
+    class="relative z-10 w-full md:w-[50%] flex justify-center mt-10 md:mt-0">
+
+    <img
+      class="w-[80%] sm:w-[70%] md:w-[65%] md:mb-[15%] drop-shadow-[0_20px_50px_rgba(255,193,7,0.3)]"
+      src="home1.png"
+      alt="Phoenix Students">
+
+    <!-- التأثير الباهت -->
+    <div class="absolute inset-0  bg-gradient-to-r  from-[#FFC107]  to-transparent  opacity-10 blur-3xl  -z-10">
+    </div>
+  </div>
+
+</div>
+
+<app-teacher [limit]="'Y'"></app-teacher>
+<div class="flex justify-center mt-10">
+  <button
+    routerLink="/Teachers"
+    class="bg-[#FFC107] cursor-pointer text-black px-8 py-3 rounded-full font-bold
+           hover:bg-yellow-500 transition shadow-lg">
+    عرض جميع المدرسين
+  </button>
+</div>
+
+<section class="py-16 sm:py-20 lg:py-24">
+
+  <!-- Title -->
+  <div class="relative z-10 text-center mb-12 px-4">
+    <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-4">
+      لماذا تختار <span class="text-[#FFC107]">فينيكس</span>؟
+    </h2>
+    <p class="text-gray-400 max-w-2xl mx-auto text-sm sm:text-base">
+      لأننا نؤمن أن التفوق يحتاج أكثر من مجرد درس.
+    </p>
+  </div>
+
+  <!-- Cards -->
+  <div
+    class="grid gap-6 sm:gap-8 lg:gap-10
+           px-4 sm:px-8 lg:px-20
+           grid-cols-1 sm:grid-cols-2 md:grid-cols-4
+           mx-auto">
+
+    <div
+      class="group bg-gradient-to-b from-[#1a1a1a] to-[#111] p-6 sm:p-8 rounded-3xl
+             border border-gray-800 hover:border-[#FFC107]
+             hover:-translate-y-2 transition-all duration-300 shadow-xl text-center">
+      <div class="text-[#FFC107] text-3xl sm:text-4xl mb-4">🎓</div>
+      <h3 class="text-white text-lg sm:text-xl font-bold mb-2">
+        مدرسون معتمدون
+      </h3>
+      <p class="text-gray-400 text-sm">
+        نخبة مختارة بعناية لضمان أعلى جودة تعليم.
+      </p>
+    </div>
+
+    <div
+      class="group bg-gradient-to-b from-[#1a1a1a] to-[#111] p-6 sm:p-8 rounded-3xl
+             border border-gray-800 hover:border-[#FFC107]
+             hover:-translate-y-2 transition-all duration-300 shadow-xl text-center">
+      <div class="text-[#FFC107] text-3xl sm:text-4xl mb-4">⚡</div>
+      <h3 class="text-white text-lg sm:text-xl font-bold mb-2">
+        حجز فوري
+      </h3>
+      <p class="text-gray-400 text-sm">
+        احجز حصتك خلال ثوانٍ بدون خطوات معقّدة.
+      </p>
+    </div>
+
+    <div
+      class="group bg-gradient-to-b from-[#1a1a1a] to-[#111] p-6 sm:p-8 rounded-3xl
+             border border-gray-800 hover:border-[#FFC107] 
+             hover:-translate-y-2 transition-all duration-300 shadow-xl text-center">
+      <div class="text-[#FFC107] text-3xl sm:text-4xl mb-4">📊</div>
+      <h3 class="text-white text-lg sm:text-xl font-bold mb-2">
+        متابعة مستمرة
+      </h3>
+      <p class="text-gray-400 text-sm">
+        تقارير وتقييم مستمر لمستواك وتقدمك.
+      </p>
+    </div>
+
+    <div
+      class="group bg-gradient-to-b from-[#1a1a1a] to-[#111] p-6 sm:p-8 rounded-3xl
+             border border-gray-800 hover:border-[#FFC107] active:border-[#FFC107]
+             hover:-translate-y-2 transition-all duration-300 shadow-xl text-center">
+      <div class="text-[#FFC107] text-3xl sm:text-4xl mb-4">🚀</div>
+      <h3 class="text-white text-lg sm:text-xl font-bold mb-2">
+        نتائج ملموسة
+      </h3>
+      <p class="text-gray-400 text-sm">
+        تحسّن حقيقي في الأداء والثقة بالنفس.
+      </p>
+    </div>
+
+  </div>
+</section>
+
+
+<section class="py-20  px-5 md:px-16">
+  <h2 class="text-3xl md:text-4xl font-bold text-center text-white mb-14">
+    كيف تبدأ مع <span class="text-[#FFC107]">فينيكس</span>؟
+  </h2>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-10 text-center">
+    <div>
+      <div class="text-[#FFC107] text-5xl font-bold mb-4">1</div>
+      <h3 class="text-white font-bold text-xl mb-2">اختر المدرس</h3>
+      <p class="text-gray-400 text-sm">تصفح المدرسين حسب التخصص والخبرة.</p>
+    </div>
+
+    <div>
+      <div class="text-[#FFC107] text-5xl font-bold mb-4">2</div>
+      <h3 class="text-white font-bold text-xl mb-2">احجز الموعد</h3>
+      <p class="text-gray-400 text-sm">اختر الوقت المناسب لك بسهولة.</p>
+    </div>
+
+    <div>
+      <div class="text-[#FFC107] text-5xl font-bold mb-4">3</div>
+      <h3 class="text-white font-bold text-xl mb-2">ابدأ التعلم</h3>
+      <p class="text-gray-400 text-sm">انطلق نحو التفوق بثقة.</p>
+    </div>
+  </div>
+</section>
+ <!-- CTA داخل الفوتر -->
+ <div class="text-center px-5 mb-16">
+  <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
+    مستقبلك يبدأ من هنا
+  </h2>
+  <p class="text-gray-400 mb-6 text-lg">
+    لا تضيع الوقت، اختر مدرّسك وابدأ رحلتك الآن.
+  </p>
+
+  <button
+    routerLink="/Teachers"
+    class="bg-[#ffbc13] text-[#000000] px-10 py-4 rounded-full font-bold cursor-pointer
+           hover:bg-[#000000] hover:text-[#ffbc13] transition shadow-xl">
+    ابدأ الآن
+  </button>
+</div>
+

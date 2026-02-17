@@ -1,0 +1,95 @@
+<section class="py-12 sm:py-16 lg:py-20 text-center">
+  <h2 class="text-[#FFC107] text-2xl sm:text-3xl font-bold mb-10">
+    إحجز الآن مع أفضل المدرسين
+  </h2>
+
+  @if (loading) {
+<div
+  class="flex w-full overflow-hidden justify-center gap-[3%] px-4 sm:px-8 lg:px-36 mx-auto w-full">
+
+  @for (i of [1, 2, 3]; track $index) {
+    <div 
+      class="bg-[#1a1a1a] p-4 sm:p-5 rounded-xl animate-pulse shadow-lg aspect-[3/4] flex-shrink-0 mb-[3%]
+             w-[100%] lg:w-[31%]">
+      
+      <div class="w-full h-[70%] bg-gray-700 rounded-lg mb-4"></div>
+
+      <div class="space-y-3">
+        <div class="h-3 bg-gray-700 rounded w-3/4 mx-auto"></div>
+        <div class="h-2 bg-gray-700 rounded w-1/2 mx-auto"></div>
+        <div class="h-8 bg-gray-700 rounded-lg w-full mt-2"></div>
+      </div>
+    </div>
+  }
+</div>
+
+
+  } @else {
+    <!-- Teachers Cards -->
+    <div
+      class="relative flex flex-wrap gap-[3%] px-4 sm:px-8 lg:px-36 mx-auto"
+      [class]="limit === 'Y' ? 'flex-row' : 'flex-col'"> 
+
+      @if(limit=='Y'){
+        <button
+          (click)="scrollLeft()"
+          class="absolute left-2 sm:left-10 lg:left-20 top-[50%] -translate-y-1/2 z-20 bg-black/60 hover:bg-black text-[#FFC107] w-10 h-10 rounded-full flex items-center justify-center transition">
+          &gt;
+        </button>
+      }
+
+      <div
+        #slider
+        class="flex gap-[3%] mx-auto w-full transition-all duration-300 overflow-x-auto scroll-smooth no-scrollbar"
+        [class.flex-nowrap]="limit === 'Y'"
+        [class.flex-wrap]="limit !== 'Y'">
+  
+        @for (t of displayedTeachers; track t.id) {
+          <div  (click)="openTeacher(t.id)"
+            class="relative rounded-xl mb-[3%] overflow-hidden shadow-lg cursor-pointer group aspect-[3/4] hover:border-2 hover:border-[#FFC107] flex-shrink-0 transition-all
+                   w-[98%] sm:w-[48%] lg:w-[31%]">
+            <!-- Background Image -->
+            <img
+           
+              [src]="t.img || 'teacher1.png'"
+              class="absolute cursor-pointer inset-0 w-full h-full object-cover transition duration-500 group-hover:scale-105" />
+  
+            <!-- Overlay -->
+            <div class="absolute inset-0 bg-black/60 group-hover:bg-black/30 transition"></div>
+  
+            <!-- Content -->
+            <div class="relative z-10 h-full flex flex-col justify-end p-4 text-center">
+              <h3 class="text-white font-bold text-lg">
+                الأستاذ{{ t.gender === 'F' ? 'ة' : '' }}
+                {{ t.firstName }} {{ t.lastName }}
+              </h3>
+  
+              <p class="text-gray-300 text-sm mt-1">
+                {{ t.subject || 'بدون تخصص' }}
+              </p>
+  
+              <button
+                (click)="openTeacher(t.id)"
+                class="mt-4 bg-[#FFC107] text-black py-2 rounded-lg font-semibold hover:bg-yellow-500 transition">
+                سجل الآن
+              </button>
+            </div>
+          </div>
+        }
+        @empty {
+          <p class="text-gray-400 col-span-full">
+            لا يوجد مدرسين متاحين حالياً.
+          </p>
+        }
+      </div>
+
+      @if(limit=='Y'){
+        <button
+          (click)="scrollRight()"
+          class="absolute right-2 sm:right-10 lg:right-20 top-[50%] -translate-y-1/2 z-20 bg-black/60 hover:bg-black text-[#FFC107] w-10 h-10 rounded-full flex items-center justify-center transition">
+          &lt;
+        </button>
+      }
+    </div>
+  }
+</section>

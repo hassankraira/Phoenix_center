@@ -1,0 +1,388 @@
+<div class="p-4 md:p-6 min-h-screen text-white" dir="rtl">
+
+  <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+
+    <h2
+      class="text-xl md:text-2xl font-bold text-yellow-500
+             border-r-4 border-yellow-500 pr-3">
+      جدول القاعات الأسبوعي
+    </h2>
+
+    <div class="flex gap-2 justify-center md:justify-start hidden md:flex">
+      <button
+        (click)="scroll(-1)"
+        class="bg-gray-800 hover:bg-yellow-500 hover:text-black
+               px-3 py-2 text-xs md:text-sm rounded-lg transition-all">
+        → اليوم السابق
+      </button>
+
+      <button
+        (click)="scroll(1)"
+        class="bg-gray-800 hover:bg-yellow-500 hover:text-black
+               px-3 py-2 text-xs md:text-sm rounded-lg transition-all">
+        اليوم التالي ←
+      </button>
+    </div>
+
+    <div class="flex gap-2 justify-center md:justify-end">
+      @if (isEditMode()) {
+        <button
+        class="bg-emerald-600 px-4 py-2 rounded text-sm flex items-center gap-2 disabled:bg-emerald-800"
+        (click)="saveChanges()"
+        [disabled]="loading()">
+        @if (loading()) {
+            <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+        } @else {
+            💾 حفظ
+        }
+    </button>
+      <button
+        class="bg-gray-600 px-4 py-2 rounded text-sm"
+        (click)="cancelEdit()">
+        إلغاء
+      </button>
+      } 
+    </div>
+
+  </div>
+
+  <div
+    #scrollContainer
+    class="overflow-x-auto overflow-y-auto hidden md:block
+           rounded-xl shadow-2xl
+           max-h-[65vh] md:max-h-[70vh]
+           scroll-smooth touch-pan-x overscroll-x-contain taa">
+
+    @if (loading()) {
+      <div class="flex justify-center items-center py-20">
+        <div
+          class="animate-spin rounded-full h-12 w-12
+                 border-b-2 border-yellow-500">
+        </div>
+      </div>
+    }
+
+    @else {
+
+      <table
+        class="min-w-full text-xs md:text-sm text-right
+               border-separate border-spacing-0">
+
+        <thead class="sticky top-0 z-20">
+          <tr class="bg-yellow-500 text-black">
+            <th
+              class="p-2 md:p-4 border-b border-yellow-600
+                     sticky right-0 z-30 bg-yellow-500 text-center">
+              الوقت
+            </th>
+
+            @for (day of days; track $index) {
+              <th
+                colspan="6"
+                class="p-2 md:p-4 text-right md:text-center border-b border-yellow-600
+                       font-black text-sm md:text-lg
+                       min-w-[90vw] md:min-w-[70vw]">
+                {{ day }}
+              </th>
+            }
+          </tr>
+
+          <tr class="bg-yellow-600 text-black text-[10px] md:text-xs">
+            <th
+              class="p-1 md:p-2 border-b border-yellow-700
+                     sticky right-0 z-30 bg-yellow-600">
+            </th>
+
+            @for (day of days; track $index) {
+              @for (room of rooms().slice(0,6); track room.Id) {
+                <th
+                  class="p-1 md:p-2 text-center border-b border-yellow-700
+                         min-w-[120px] md:min-w-[calc(100vw/8)]">
+                  {{ room.Name }}
+                </th>
+              }
+            }
+          </tr>
+
+        </thead>
+
+        <tbody class="">
+
+          @for (slot of timeSlots(); track slot.searchKey) {
+
+            <tr
+              class="h-20 border-b border-gray-800
+                     hover:bg-white/[0.02]">
+
+              <td
+                class="p-2 md:p-4 font-bold text-yellow-500
+                       bg-[#181818] sticky right-0 z-10
+                       text-center text-xs md:text-sm
+                       border-l border-gray-800">
+                {{ slot.displayLabel }}
+              </td>
+
+              @for (day of days; track $index) {
+                @for (room of rooms(); track room.Id) {
+
+                  <td class="p-1 border-r border-gray-800/40"
+    (click)="selectCellForEdit(day, room.Id, slot.searchKey)">
+
+    @let sched = getSched(day, room.Name, slot.searchKey);
+    @let isOccupied = isRoomOccupied(day, room.Name, slot.searchKey);
+
+    @if (isEditMode() && activeCell?.day === day && activeCell?.roomId === room.Id && activeCell?.slotKey === slot.searchKey) {
+        
+        @if (isOccupied && !sched) {
+            <div class="text-[10px] text-red-400 text-center p-1 bg-red-900/20 rounded border border-red-500/50">
+                ⚠️ تعارض قاعات
+            </div>
+        } @else {
+          <select 
+          #groupSelect
+          (change)="editThisCill(day, slot, groupSelect.value); activeCell = null"
+          class="w-full px-2 py-1 border rounded text-black bg-white">
+          <option [value]="null">إختر مجموعة</option>
+          
+          @for (g of groups(); track g.Id) {
+              @let groupBusy = isGroupOccupied(day, slot.searchKey, g.Id, room.Name);
+              
+              <option 
+                  [value]="g.Id" 
+                  [selected]="sched?.group_id === g.Id"
+                  [disabled]="groupBusy"
+                  [ngClass]="groupBusy ? 'text-gray-400 bg-gray-100' : ''">
+                  {{ g.Name }} {{ groupBusy ? '(محجوزة حالياً)' : '' }}
+              </option>
+          }
+      </select>
+        }
+
+    } @else {
+        @if (sched) {
+            <div (dblclick)="enableEdit(day, room.Id, slot.searchKey)"
+                 class="h-full w-full p-2 md:p-3 rounded-lg flex flex-col justify-center items-center text-center shadow-md transition-all relative group"
+                 [ngClass]="[
+                    sched.is_active === 1 ? 'bg-emerald-600' : 'bg-gray-800/50',
+                    sched._state === 'deleted' ? 'opacity-30 grayscale blur-[1px] border-2 border-red-500' : ''
+                 ]">
+
+                @if (isEditMode() && sched._state !== 'deleted') {
+                    <button 
+                        (click)="$event.stopPropagation(); deleteSchedule(day, room.Name, slot.searchKey)"
+                        class="absolute -top-2 -left-2 bg-red-600 hover:bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center shadow-xl  transition-transform hover:scale-110">
+                        ✕
+                    </button>
+                }
+
+                <span class="font-bold text-xs md:text-sm leading-tight mb-1">
+                    {{ sched.group_name }}
+                </span>
+
+                <span class="text-[9px] md:text-[10px] opacity-80 border-t border-white/20 pt-1 w-full">
+                    {{ sched.teacher }}
+                </span>
+
+                @if (sched._state === 'deleted') {
+                    <span class="absolute inset-0 flex items-center justify-center bg-black/40 text-[10px] text-red-400 font-black tracking-widest uppercase">
+                        سيتم الحذف
+                    </span>
+                }
+            </div>
+        } @else {
+            <div (dblclick)="enableEdit(day, room.Id, slot.searchKey)" 
+                 class="text-center cursor-pointer py-2 transition-colors"
+                 [ngClass]="isOccupied ? 'text-red-900/40 cursor-not-allowed' : 'text-gray-600 hover:text-yellow-500'">
+                {{ isOccupied ? '✕' : '—' }}
+            </div>
+        }
+    }
+</td>
+                }
+              }
+
+            </tr>
+          }
+
+        </tbody>
+      </table>
+
+    }
+  </div>
+<div #scrollContainer class="block md:hidden p-3 space-y-4 text-white" dir="rtl">
+
+  <!-- ===== Day Selector ===== -->
+  <div class="sticky top-0 z-30 bg-[#121212] rounded-xl shadow-lg p-3 flex items-center justify-between">
+    <button
+      (click)="scrollDay(-1)"
+      class="bg-gray-800 px-3 py-2 rounded-lg text-sm">
+      →
+    </button>
+    
+
+    <span class="text-yellow-400 font-black text-lg">
+      {{ currentDay() }}
+    </span>
+    <button
+    (click)="scrollDay(1)"
+    class="bg-gray-800 px-3 py-2 rounded-lg text-sm">
+    ←
+  </button>
+    
+  </div>
+
+  <!-- ===== Time Slot Cards ===== -->
+  @for (slot of timeSlots(); track slot.searchKey) {
+
+    <div class="bg-[#1e1e1e] rounded-2xl shadow-xl p-4 space-y-3">
+
+      <!-- Time Header -->
+    <!-- Time Header -->
+<div
+class="flex items-center justify-between cursor-pointer"
+(click)="toggleSlot(slot.searchKey)"
+>
+
+<div class="flex items-center gap-2 text-yellow-500 font-black">
+  ⏰ {{ slot.displayLabel }}
+</div>
+
+<!-- Arrow -->
+<div
+  class="transition-transform duration-300 text-yellow-400"
+  [ngClass]="isExpanded(slot.searchKey) ? 'rotate-180' : ''">
+  ⌄
+</div>
+
+</div>
+
+@if (isExpanded(slot.searchKey)) {
+
+      <!-- Rooms -->
+      <div class="space-y-2">
+
+        @for (room of rooms(); track room.Id) {
+
+          @let sched = getSched(currentDay(), room.Name, slot.searchKey);
+          @let isOccupied = isRoomOccupied(currentDay(), room.Name, slot.searchKey);
+
+          <!-- ===== Room Card ===== -->
+          <div
+            class="rounded-xl p-3 border border-gray-700 transition-all relative"
+            [ngClass]="
+              sched
+                ? (sched.is_active === 1 ? 'bg-emerald-600' : 'bg-gray-800/60')
+                : isOccupied
+                  ? 'bg-red-900 text-red-400'
+                  : 'bg-[#1f1f1f]'
+            "
+            (click)="selectCellForEdit(currentDay(), room.Id, slot.searchKey)"
+          >
+
+            <!-- Delete Button -->
+            @if (isEditMode() && sched && sched._state !== 'deleted') {
+              <button
+                (click)="$event.stopPropagation(); deleteSchedule(currentDay(), room.Name, slot.searchKey)"
+                class="absolute -top-2 -left-2 w-6 h-6 rounded-full bg-red-500 text-white text-xs flex items-center justify-center shadow-lg">
+                ✕
+              </button>
+            }
+
+            <!-- Room Name -->
+            <div class="font-bold mb-1">
+              🏫 {{ room.Name }}
+            </div>
+
+            <!-- ===== EDIT MODE ===== -->
+            @if (
+              isEditMode() &&
+              activeCell?.day === currentDay() &&
+              activeCell?.roomId === room.Id &&
+              activeCell?.slotKey === slot.searchKey
+            ) {
+
+              @if (isOccupied && !sched) {
+
+                <div class="text-xs text-red-400 bg-red-900/30 p-2 rounded-lg text-center">
+                  ⚠️ تعارض قاعات
+                </div>
+
+              } @else {
+
+                <select
+                  #groupSelect
+                  class="w-full mt-2 px-3 py-2 rounded-lg text-black bg-white text-sm"
+                  (change)="editThisCill(currentDay(), slot, groupSelect.value); activeCell = null">
+
+                  <option [value]="null">إختر مجموعة</option>
+
+                  @for (g of groups(); track g.Id) {
+
+                    @let groupBusy = isGroupOccupied(
+                      currentDay(),
+                      slot.searchKey,
+                      g.Id,
+                      room.Name
+                    );
+
+                    <option
+                      [value]="g.Id"
+                      [selected]="sched?.group_id === g.Id"
+                      [disabled]="groupBusy">
+                      {{ g.Name }} {{ groupBusy ? '(محجوزة)' : '' }}
+                    </option>
+                  }
+
+                </select>
+              }
+
+            }
+
+            <!-- ===== VIEW MODE ===== -->
+            @else {
+
+              @if (sched) {
+
+                <div
+                  (dblclick)="enableEdit(currentDay(), room.Id, slot.searchKey)"
+                  class="text-sm space-y-1">
+
+                  <div class="font-black">
+                    {{ sched.group_name }}
+                  </div>
+
+                  <div class="text-[11px] opacity-80">
+                    {{ sched.teacher }}
+                  </div>
+
+                  @if (sched._state === 'deleted') {
+                    <div class="absolute inset-0 bg-black/50 flex items-center justify-center text-red-400 font-black text-xs rounded-xl">
+                      سيتم الحذف
+                    </div>
+                  }
+
+                </div>
+
+              } @else {
+
+                <div
+                  (dblclick)="enableEdit(currentDay(), room.Id, slot.searchKey)"
+                  class="text-xs text-center opacity-60">
+                  {{ isOccupied ? '✕ محجوزة' : '— فارغ' }}
+                </div>
+
+              }
+
+            }
+
+          </div>
+        }
+
+      </div>
+    }
+    </div>
+  }
+
+</div>
+
+</div>

@@ -1,0 +1,8 @@
+.taa::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Firefox */
+  .taa {
+    scrollbar-width: none;
+  }

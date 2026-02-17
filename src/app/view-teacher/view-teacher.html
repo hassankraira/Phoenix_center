@@ -1,0 +1,68 @@
+@if(isLoading()) {
+  <div class="fixed top-0 left-0 w-full h-1 z-[100] bg-gray-900">
+    <div class="h-full bg-yellow-400 shadow-[0_0_15px_#facc15] transition-all duration-500 loading-bar-animation"></div>
+  </div>
+
+  <div class="flex flex-col items-center justify-center min-h-screen bg-black text-white">
+    <div class="w-12 h-12 border-4 border-yellow-400/20 border-t-yellow-400 rounded-full animate-spin"></div>
+    <p class="mt-4 text-gray-400 font-medium animate-pulse">جاري تحميل بيانات المدرس...</p>
+  </div>
+}
+
+@if(!isLoading() && teacher()){
+<div class="min-h-screen text-white py-16 px-4" dir="rtl">
+  <div class="max-w-6xl justify-center mx-auto flex flex-col md:flex-row gap-10 mb-16">
+    <div class="w-full md:w-1/2 flex justify-center items-start">
+      <div class="relative w-full max-w-full overflow-hidden rounded-2xl 
+                  shadow-xl shadow-yellow-500/20">
+        
+        <img 
+          [src]="teacher()?.img || 'teacher1.png'" 
+          alt="Teacher" 
+          class="w-full object-cover max-h-[500px]"
+        />
+  
+        <!-- Gradient fade -->
+       
+  
+      </div>
+    </div>
+  </div>
+  
+
+  <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-10">
+    <div class="bg-[#111] w-full  p-6 rounded-2xl shadow-xl border border-yellow-400/20">
+      <h1 class="text-4xl font-bold text-yellow-400 mb-4">{{ teacher()?.name }}</h1>
+
+      <div class="flex flex-row gap-4">
+        <div>
+      <p class="text-lg mb-2">📘 المادة: <span class="text-yellow-300">{{ teacher()?.subject }}</span></p>
+      <p  class="text-lg mb-6">📞 رقم الهاتف: <span dir="ltr" class="text-yellow-300">{{ teacher()?.phone }}</span></p>
+    </div>
+      <div>
+      <a [href]="'tel:' + teacher()?.phone" class="inline-block bg-yellow-400 text-black px-6 py-3 rounded-xl font-bold hover:bg-yellow-500 transition">
+        الاتصال بالمدرس
+      </a>
+    </div>
+    </div>
+      @if(safeVideoUrl()){
+        <h2 class="text-2xl font-bold text-yellow-400 mb-4 mt-8">فيديو تعريفي</h2>
+        <div class="aspect-video rounded-xl overflow-hidden border border-gray-800 shadow-2xl">
+           <iframe [src]="safeVideoUrl()" class="w-full h-full" frameborder="0" allowfullscreen></iframe>
+        </div>
+      }
+    </div>
+    <div class="bg-[#111] p-8 rounded-2xl shadow-xl border border-yellow-400/20">
+      <h2 class="text-2xl font-bold text-yellow-400 mb-6">سجل مع الأستاذ/ {{ teacher()?.name }}</h2>
+      <form (ngSubmit)="onSubmit()" class="space-y-4">
+        <input [(ngModel)]="student().name" name="name" placeholder="اسم الطالب" class="w-full px-4 py-2 rounded-lg border border-gray-600 bg-[#1f1f1f] focus:outline-none focus:ring-2 focus:ring-yellow-400 ng-pristine ng-valid ng-touched" required/>
+        <input [(ngModel)]="student().phone" name="phone" placeholder="رقم الهاتف" class="w-full px-4 py-2 rounded-lg border border-gray-600 bg-[#1f1f1f] focus:outline-none focus:ring-2 focus:ring-yellow-400 ng-pristine ng-valid ng-touched" required/>
+        <input [(ngModel)]="student().grade" name="grade" placeholder="الصف الدراسي" class="w-full px-4 py-2 rounded-lg border border-gray-600 bg-[#1f1f1f] focus:outline-none focus:ring-2 focus:ring-yellow-400 ng-pristine ng-valid ng-touched"/>
+        <textarea [(ngModel)]="student().notes" name="notes" placeholder="ملاحظات إضافية" rows="4" class="w-full px-4 py-2 rounded-lg border border-gray-600 bg-[#1f1f1f] focus:outline-none focus:ring-2 focus:ring-yellow-400 ng-pristine ng-valid ng-touched"></textarea>
+        <button type="submit" class="w-full bg-yellow-400 text-black py-3 rounded-xl font-bold hover:bg-yellow-500 transition">إرسال</button>
+      </form>
+    </div>
+    
+  </div>
+</div>
+}

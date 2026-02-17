@@ -1,0 +1,359 @@
+<section class="p-6 md:p-10 min-h-screen">
+
+    <!-- العنوان -->
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+      <h1 class="text-2xl font-bold text-yellow-500">
+        إدارة المدرسين 
+      </h1>
+      <div class="flex gap-3 flex-col md:flex-row">
+        <input 
+          type="text" 
+          [ngModel]="searchText()" 
+          (ngModelChange)="searchText.set($event)" 
+          placeholder="بحث عن مدرس..." 
+          class="px-4 py-2 rounded-lg border border-gray-600 bg-[#1f1f1f]
+          focus:outline-none focus:ring-2 focus:ring-yellow-400">      
+      <button
+        (click)="addTeacher()"
+        class="bg-[#FFC107] hover:bg-yellow-500 text-black font-semibold px-5 py-2 rounded-lg shadow">
+        + إضافة مدرس
+      </button>
+    </div>
+    </div>
+    <h4 class="mb-6">
+        <span class="text-2xl font-bold text-yellow-500">عدد المدرسين : </span>
+        <span class="text-2xl font-bold text-white-500">{{teachers().length}}</span>
+    </h4>
+  
+  
+    <!-- Loading -->
+    @if (loading()) {
+      <div class="flex justify-center items-center py-20">
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-yellow-500"></div>
+      </div>
+    }
+  
+    <!-- جدول المدرسين -->
+    @else {
+      <div class="overflow-x-auto taa rounded-xl shadow hidden md:block max-h-[61vh] overflow-y-auto">
+        <table class=" min-w-full text-sm text-right max-h-[65hv] overflow-y-auto">
+          <thead class="bg-[#FFC107] text-white">
+            <tr>
+              <th class="px-4 py-3">الصورة</th>
+              <th class="px-4 py-3">الاسم</th>
+              <th class="px-4 py-3">المادة</th>
+              <th class="px-4 py-3">الهاتف</th>
+              <th class="px-4 py-3">النوع</th>
+              <th class="px-4 py-3">مميز</th>
+              <th class="px-4 py-3">رابط الفيديو التعريفي</th>
+
+              <th class="px-4 py-3 text-center">الإجراءات</th>
+            </tr>
+          </thead>
+  
+          <tbody>
+            @if (isAdding()) {
+                <tr class="">
+              
+                  <!-- الصورة -->
+                  <td class="px-4 py-3 text-center">
+                    <input
+                      [(ngModel)]="newTeacher().IMAGE"
+                      placeholder="رابط الصورة"
+                      class="w-24 px-2 py-1 border rounded border border-gray-300 focus:outline-none focus:ring-2  focus:ring-yellow-400" />
+                  </td>
+              
+                  <!-- الاسم -->
+                  <td class="px-4 py-3">
+                    <input
+                      [(ngModel)]="newTeacher().FIRST_NAME"
+                      placeholder="الاسم الأول"
+                      class="w-full px-2 py-1 border rounded border border-gray-300 focus:outline-none focus:ring-2  mb-1 focus:ring-yellow-400" />
+                    <input
+                      [(ngModel)]="newTeacher().LAST_NAME"
+                      placeholder="اسم العائلة"
+                      class="w-full px-2 py-1 border rounded border border-gray-300 focus:outline-none focus:ring-2  focus:ring-yellow-400" />
+                  </td>
+              
+                  <!-- المادة -->
+                  <td class="px-4 py-3">
+                    <input
+                      [(ngModel)]="newTeacher().SUBJECT"
+                      placeholder="المادة"
+                      class="w-full px-2 py-1 border rounded border border-gray-300 focus:outline-none focus:ring-2  focus:ring-yellow-400" />
+                  </td>
+              
+                  <!-- الهاتف -->
+                  <td class="px-4 py-3">
+                    <input
+                    [(ngModel)]="newTeacher().PHONE_NUMBER"
+                    placeholder="رقم الهاتف"
+                    required
+                    class="w-full px-2 py-1 border rounded border-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-400" />
+                                    </td>
+              
+                  <!-- النوع -->
+                  <td class="px-4 py-3">
+                    <select
+                      [(ngModel)]="newTeacher().GENDER"
+                      class="w-full  px-2 py-1 border rounded border border-gray-300 focus:outline-none focus:ring-2  focus:ring-yellow-400">
+                      <option class="text-black" value="M">ذكر</option>
+                      <option  class="text-black" value="F">أنثى</option>
+                    </select>
+                  </td>
+              
+                  <!-- مميز -->
+                  <td class="px-4 py-3">
+                    <select
+                      [(ngModel)]="newTeacher().GOLDEN"
+                      class="w-full px-2 py-1 border rounded border border-gray-300 focus:outline-none focus:ring-2  focus:ring-yellow-400">
+                      <option  class="text-black" value="N">عادي</option>
+                      <option  class="text-black" value="Y">⭐ مميز</option>
+                    </select>
+                  </td>
+              
+                  <!-- الجدول -->
+                  <td class="px-4 py-3 text-center">
+                    —
+                  </td>
+              
+                  <!-- الإجراءات -->
+                  <td class="px-4 py-3 text-center space-x-2 space-x-reverse">
+                    <button
+                      (click)="saveTeacher()" 
+                      class="px-3 py-1 bg-green-500 text-white rounded">
+                      حفظ
+                    </button>
+              
+                    <button
+                      (click)="cancelAdd()"
+                      class="px-3 py-1 bg-gray-400 text-white rounded">
+                      إلغاء
+                    </button>
+                  </td>
+                </tr>
+              }
+           
+              
+              @for (teacher of filteredTeachers(); track teacher.TEACHER_ID) {
+                <tr class="border-b border-yellow-500 hover:bg-[#b5b5b5]/[0.3] transition-colors" [class.bg-gray-700]="editingTeacherId() === teacher.TEACHER_ID">
+                  
+                  <td class="px-4 py-3">
+                    @if (editingTeacherId() === teacher.TEACHER_ID) {
+                      
+                      <input
+                      type="file"
+                      accept="image/*"
+                      (change)="onFileSelected($event)"
+                      class="w-full text-black">
+                      }
+                    
+                      @else {
+                      <img [src]="teacher.IMAGE || 'teacher1.png'" class="w-12 h-12 rounded-full object-cover mx-auto">
+                    }
+                  </td>
+              
+                  <td class="px-4 py-3">
+                    @if (editingTeacherId() === teacher.TEACHER_ID) {
+                      <input [(ngModel)]="newTeacher().FIRST_NAME" class="w-full mb-1 px-1 border rounded text-black" placeholder="الأول">
+                      <input [(ngModel)]="newTeacher().LAST_NAME" class="w-full px-1 border rounded text-black" placeholder="العائلة">
+                    } @else {
+                      {{ teacher.FIRST_NAME }} {{ teacher.LAST_NAME }}
+                    }
+                  </td>
+              
+                  <td class="px-4 py-3">
+                    @if (editingTeacherId() === teacher.TEACHER_ID) {
+                      <input [(ngModel)]="newTeacher().SUBJECT" class="w-full px-1 border rounded text-black">
+                    } @else {
+                      {{ teacher.SUBJECT }}
+                    }
+                  </td>
+              
+                  <td class="px-4 py-3">
+                    @if (editingTeacherId() === teacher.TEACHER_ID) {
+                      <input dir="ltr" [(ngModel)]="newTeacher().PHONE_NUMBER" class="w-full px-1 border rounded text-black">
+                    } @else {
+                     <div dir="ltr"> {{ teacher.PHONE_NUMBER }}</div>
+                    }
+                  </td>
+              
+                  <td class="px-4 py-3">
+                    @if (editingTeacherId() === teacher.TEACHER_ID) {
+                      <select [(ngModel)]="newTeacher().GENDER" class="text-black rounded">
+                        <option value="M">ذكر</option>
+                        <option value="F">أنثى</option>
+                      </select>
+                    } @else {
+                      {{ teacher.GENDER === 'M' ? 'ذكر' : 'أنثى' }}
+                    }
+                  </td>
+              
+                  <td class="px-4 py-3">
+                    @if (editingTeacherId() === teacher.TEACHER_ID) {
+                      <select [(ngModel)]="newTeacher().GOLDEN" class="text-black rounded">
+                        <option value="N">عادي</option>
+                        <option value="Y">⭐ مميز</option>
+                      </select>
+                    } @else {
+                      <span [class.text-yellow-500]="teacher.GOLDEN === 'Y'">
+                        {{ teacher.GOLDEN === 'Y' ? '⭐ مميز' : 'عادي' }}
+                      </span>
+                    }
+                  </td>
+                  <td class="px-4 py-3 ">
+                    @if(editingTeacherId()===teacher.TEACHER_ID){
+                      <input dir="ltr" [(ngModel)]="newTeacher().youtubeUrl" class="w-full px-1 border rounded text-black">
+   
+                    }@else{
+                      <a dir="ltr" class="block w-30 truncate text-white-600 hover:underline" target="_blank" href="{{teacher.youtubeUrl}}">{{teacher.youtubeUrl}}</a> 
+                    }
+                  </td>
+                  <td class="px-4 py-3 text-center flex flex-col space-y-2 space-y-reverse">
+                    @if (editingTeacherId() === teacher.TEACHER_ID) {
+                      <button (click)="saveTeacher()" class="px-2 py-1 bg-green-500 text-white rounded text-xs">حفظ</button>
+                      <button (click)="cancelAdd()" class="px-2 py-1 bg-gray-500 text-white rounded text-xs">إلغاء</button>
+                    } @else {
+                      <button (click)="editTeacher(teacher)" class=" py-1 bg-blue-500 text-white rounded text-xs w-full">تعديل</button>
+                      <button (click)="deleteTeacher(teacher)" class="px-2 py-1 bg-red-500 text-white rounded text-xs w-full">حذف</button>
+                    }
+                  </td>
+                </tr>
+              }
+  
+            @if (filteredTeachers().length === 0) {
+              <tr>
+                <td colspan="7" class="text-center py-10 text-gray-500">
+                  لا يوجد مدرسين مطابقين للبحث
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+  <!-- Cards للموبايل -->
+      </div>
+      
+<!-- Cards للموبايل -->
+<div class="md:hidden space-y-4 w-full">
+
+  @for (teacher of filteredTeachers(); track teacher.TEACHER_ID) {
+
+    <div class="bg-[#1f1f1f] rounded-xl p-4 shadow border border-yellow-500/20">
+
+      <!-- 🟡 وضع التعديل -->
+      @if (editingTeacherId() === teacher.TEACHER_ID) {
+
+        <div class="space-y-3">
+
+          <input [(ngModel)]="newTeacher().FIRST_NAME"
+            placeholder="الاسم الأول"
+            class="w-full p-2 rounded border">
+
+          <input [(ngModel)]="newTeacher().LAST_NAME"
+            placeholder="اسم العائلة"
+            class="w-full p-2 rounded border">
+
+          <input [(ngModel)]="newTeacher().SUBJECT"
+            placeholder="المادة"
+            class="w-full p-2 rounded border">
+
+          <input [(ngModel)]="newTeacher().PHONE_NUMBER"
+            placeholder="رقم الهاتف"
+            class="w-full p-2 rounded border">
+
+          <select [(ngModel)]="newTeacher().GENDER"
+            class="w-full p-2 rounded border">
+            <option value="M">ذكر</option>
+            <option value="F">أنثى</option>
+          </select>
+
+          <select [(ngModel)]="newTeacher().GOLDEN"
+            class="w-full p-2 rounded border">
+            <option value="N">عادي</option>
+            <option value="Y">⭐ مميز</option>
+          </select>
+          <div class="mb-3">
+            <label class="block text-sm font-medium mb-1">رابط الفيديو التعريفي (YouTube)</label>
+            <input
+              type="text"
+              [(ngModel)]="newTeacher().youtubeUrl"
+              placeholder="https://www.youtube.com/watch?v=..."
+              class="w-full px-3 py-2 border rounded border-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+            />
+          </div>
+          
+          <input
+          type="file"
+          accept="image/*"
+          (change)="onFileSelected($event)"
+          class="w-full text-black">
+          <div class="flex gap-2 pt-2">
+            <button
+              (click)="saveTeacher()" 
+              class="flex-1 bg-green-500 py-2 rounded text-white">
+              حفظ
+            </button>
+
+            <button
+              (click)="cancelAdd()"
+              class="flex-1 bg-gray-500 py-2 rounded text-white">
+              إلغاء
+            </button>
+          </div>
+
+        </div>
+
+      }
+      <!-- 🔵 وضع العرض -->
+      @else {
+
+        <div class="flex  items-center gap-4 mb-3">
+          <img
+            [src]="teacher.IMAGE || 'teacher1.png'"
+            class="w-14 h-14 rounded-full object-cover">
+
+          <div>
+            <h3 class="font-bold text-lg">
+              {{ teacher.FIRST_NAME }} {{ teacher.LAST_NAME }}
+            </h3>
+            <p class="text-sm text-gray-400">
+              {{ teacher.SUBJECT }}
+            </p>
+          </div>
+
+        </div>
+   
+        <div class="grid grid-cols-2 gap-2 text-sm mb-3">
+          <div>📞 {{ teacher.PHONE_NUMBER }}</div>
+          <div>👤 {{ teacher.GENDER === 'M' ? 'ذكر' : 'أنثى' }}</div>
+          <div> {{ teacher.GOLDEN === 'Y' ? '⭐ مميز' : 'عادي' }}</div>
+        </div>
+
+        <div>
+         <a class="block w-30 truncate text-white-600 hover:underline" target="_blank" href="{{teacher.youtubeUrl}}">{{teacher.youtubeUrl}}</a> 
+        </div>
+        <div class="flex gap-2">
+          <button
+            (click)="editTeacher(teacher)"
+            class="flex-1 bg-blue-500 py-2 rounded text-white">
+            تعديل
+          </button>
+
+          <button
+            (click)="deleteTeacher(teacher)"
+            class="flex-1 bg-red-500 py-2 rounded text-white">
+            حذف
+          </button>
+        </div>
+
+      }
+
+    </div>
+  }
+
+</div>
+
+    }
+  
+  </section>
+  
