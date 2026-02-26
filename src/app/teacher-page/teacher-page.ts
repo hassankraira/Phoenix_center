@@ -74,7 +74,7 @@ export class TeacherPage implements OnInit {
   
       // حفظ في localStorage
       localStorage.setItem('user', JSON.stringify(updatedUser));
-      this.api.changeTeacherImage({
+      this.api.changeTeacherImage ({
         TEACHER_ID: this.user()!.teacherId,
         IMAGE_URL: imageUrl
       }).subscribe();

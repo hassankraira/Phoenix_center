@@ -18,6 +18,7 @@ import { About } from './about/about';
 import { Teacher } from './teacher/teacher';
 import { Home } from './home/home';
 import { Routes } from '@angular/router';
+
 export const routes: Routes = [
 { path: '', redirectTo: 'Home', pathMatch: 'full' },
 

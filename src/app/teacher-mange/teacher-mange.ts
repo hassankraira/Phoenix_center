@@ -222,7 +222,7 @@ generateWhatsAppLink(phone: string, username: string, password: string): string 
 كلمة المرور: ${password}
 
 رابط الدخول:
-https://hassankraira.github.io/Phoenix_center/Login
+https://hassankraira.github.io/Phoenix_center/#/Login
 ⚠️ يرجى تغيير كلمة المرور بعد أول تسجيل دخول
 `;
 
