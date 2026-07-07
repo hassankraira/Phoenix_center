@@ -44,14 +44,7 @@
             من نحن
           </a>
         </li>
-        <li>
-          <a routerLink="/Services"
-             [class.active]="this.currentRoute.includes('/Services')"
-             class="nav-link text-gray-200 hover:text-[#ffbc13] transition nav-link relative pb-2 transition hover:after:w-full active:text-[#ffbc13]"
-             >
-            الخدمات
-          </a>
-        </li>
+      
         <li>
           <a routerLink="/Contact"
              [class.active]="this.currentRoute.includes('/Contact')"
@@ -148,12 +141,7 @@
       </a>
     </li>
     <li>
-      <a routerLink="/Services"
-         (click)="toggleMenu()"
-         [class.active]="this.currentRoute.includes('/Services')"
-         class="text-gray-200 hover:text-[#ffbc13]">
-        الخدمات
-      </a>
+     
     </li>
       <a routerLink="/Login"
          (click)="toggleMenu()"

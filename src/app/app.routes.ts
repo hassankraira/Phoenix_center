@@ -17,7 +17,6 @@ import { Contactus } from './contactus/contactus';
 import { About } from './about/about';
 import { Teacher } from './teacher/teacher';
 import { Home } from './home/home';
-import { ServicesPage } from './services-page/services-page';
 import { Categories } from './categories/categories';
 import { Routes } from '@angular/router';
 
@@ -45,12 +44,7 @@ export const routes: Routes = [
     component: Contactus,
     title: 'تواصل معنا',
   },
-  {
-    path: 'Services',
-    component: ServicesPage,
-    title: 'الخدمات',
-    pathMatch: 'full',
-  },
+
   {
     path: 'Categories/:id',
     component: Categories,
