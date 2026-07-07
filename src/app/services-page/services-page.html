@@ -1,0 +1,109 @@
+<section class="min-h-screen bg-[#0b0b0b] px-4 sm:px-8 lg:px-20 py-12" dir="rtl">
+  <div class="max-w-7xl mx-auto">
+    <h1 class="text-3xl md:text-4xl font-bold text-white text-center mb-4">الخدمات</h1>
+    <p class="text-gray-400 text-center mb-10">تصفح جميع الخدمات المتاحة</p>
+
+    @if (categories().length > 1) {
+      <div class="flex flex-wrap justify-center gap-3 mb-10">
+        <button (click)="filterByCategory(null)"
+          class="px-5 py-2 rounded-full text-sm font-medium transition cursor-pointer"
+          [class.bg-[#ffbc13]]="!selectedCategory()"
+          [class.text-black]="!selectedCategory()"
+          [class.bg-white/5]="selectedCategory()"
+          [class.text-gray-300]="selectedCategory()"
+          [class.hover:bg-white/10]="selectedCategory()">
+          الكل
+        </button>
+        @for (cat of categories(); track cat) {
+          <button (click)="filterByCategory(cat)"
+            class="px-5 py-2 rounded-full text-sm font-medium transition cursor-pointer"
+            [class.bg-[#ffbc13]]="selectedCategory() === cat"
+            [class.text-black]="selectedCategory() === cat"
+            [class.bg-white/5]="selectedCategory() !== cat"
+            [class.text-gray-300]="selectedCategory() !== cat"
+            [class.hover:bg-white/10]="selectedCategory() !== cat">
+            {{ cat }}
+          </button>
+        }
+      </div>
+    }
+
+    @if (loading()) {
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        @for (i of [1,2,3,4,5,6]; track $index) {
+          <div class="bg-[#1a1a1a] rounded-2xl overflow-hidden animate-pulse">
+            <div class="h-48 bg-gray-700"></div>
+            <div class="p-5 space-y-3">
+              <div class="h-5 bg-gray-700 rounded w-3/4"></div>
+              <div class="h-3 bg-gray-700 rounded w-full"></div>
+              <div class="h-3 bg-gray-700 rounded w-1/2"></div>
+              <div class="h-10 bg-gray-700 rounded-lg w-full"></div>
+            </div>
+          </div>
+        }
+      </div>
+    } @else {
+      @if (filteredServices().length === 0) {
+        <div class="text-center py-20">
+          <p class="text-gray-500 text-lg">لا توجد خدمات متاحة حالياً</p>
+        </div>
+      } @else {
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          @for (service of filteredServices(); track service.serviceId) {
+            <div class="bg-[#1a1a1a] rounded-2xl overflow-hidden border border-white/5 hover:border-[#ffbc13]/40 transition-all duration-300 hover:-translate-y-1 group">
+              <div class="h-48 overflow-hidden relative">
+                <img [src]="service.imagePath || 'placeholder.svg'"
+                  class="w-full h-full object-cover transition duration-500 group-hover:scale-105"
+                  [alt]="service.serviceName"
+                  loading="lazy">
+                <div class="absolute top-3 right-3">
+                  <a [routerLink]="['/Categories', service.categoryName]"
+                     class="bg-[#ffbc13]/90 text-black text-xs font-bold px-3 py-1 rounded-full hover:bg-[#ffbc13] transition cursor-pointer">
+                    {{ service.categoryName }}
+                  </a>
+                </div>
+              </div>
+              <div class="p-5">
+                <h3 class="text-white font-bold text-lg mb-2">{{ service.serviceName }}</h3>
+                <p class="text-gray-400 text-sm mb-4 line-clamp-2">{{ service.description || 'لا يوجد وصف' }}</p>
+                <div class="flex items-center justify-between text-sm text-gray-400 mb-4">
+                  <span class="flex items-center gap-1">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                    {{ service.providerName }}
+                  </span>
+                  <span class="flex items-center gap-1">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                    {{ service.cityName }}
+                  </span>
+                </div>
+                <div class="flex items-center justify-between mt-4 pt-4 border-t border-white/5">
+                  <div>
+                    <span class="text-[#ffbc13] text-xl font-bold">{{ service.price }} <span class="text-sm">د.ل</span></span>
+                    <span class="text-gray-500 text-xs mr-2">{{ service.estimatedDuration }} دقيقة</span>
+                  </div>
+                  <button class="bg-[#ffbc13] hover:bg-yellow-500 text-black px-5 py-2 rounded-lg font-semibold text-sm transition cursor-pointer">
+                    احجز الآن
+                  </button>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+
+        <div class="flex justify-center items-center gap-3 mt-12">
+          <button (click)="goToPage(pageNumber() - 1)" [disabled]="pageNumber() === 1"
+            class="px-4 py-2 rounded-xl text-sm font-medium transition cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed bg-white/5 text-gray-300 hover:bg-white/10">
+            السابق
+          </button>
+          <span class="text-gray-400 text-sm">
+            صفحة {{ pageNumber() }}
+          </span>
+          <button (click)="goToPage(pageNumber() + 1)" [disabled]="!hasMore()"
+            class="px-4 py-2 rounded-xl text-sm font-medium transition cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed bg-white/5 text-gray-300 hover:bg-white/10">
+            التالي
+          </button>
+        </div>
+      }
+    }
+  </div>
+</section>

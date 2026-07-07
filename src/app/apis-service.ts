@@ -222,4 +222,39 @@ getTeacherById(id: number) {
   return this.http.get(`https://phoenix-center.duckdns.org/api/admin/teachers/${id}`);
 }
 
+private servicesApiUrl = "https://aboodhassan-001-site1.jtempurl.com/api"
+
+getServicesWithPagination(pageNumber: number, pageSize: number, ignoreSoftDelete: boolean = false): Observable<any> {
+  const token = localStorage.getItem('authToken');
+  const headers: any = {};
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+  return this.http.get(`${this.servicesApiUrl}/Service/GetServicesWithPagination`, {
+    params: {
+      pageNumber: pageNumber.toString(),
+      pageSize: pageSize.toString(),
+      ignoreSoftDelete: ignoreSoftDelete.toString()
+    },
+    headers
+  });
+}
+
+getCategoryServices(pageNumber: number, pageSize: number, categoryName: string): Observable<any> {
+  const token = localStorage.getItem('authToken');
+  const headers: any = {};
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+  return this.http.get(`${this.servicesApiUrl}/Service/GetServicesWithPagination`, {
+    params: {
+      pageNumber: pageNumber.toString(),
+      pageSize: pageSize.toString(),
+      ignoreSoftDelete: 'false',
+      categoryName
+    },
+    headers
+  });
+}
+
 }

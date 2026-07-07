@@ -39,7 +39,9 @@ export class Login implements OnInit {
   
         const user = res.user;
         localStorage.setItem('user', JSON.stringify(user));
-        
+        if (res.token) {
+          localStorage.setItem('authToken', res.token);
+        }
         currentUser.set(user); 
         this.isUserLogin = true;
   

@@ -141,6 +141,7 @@ export class TeacherPage implements OnInit {
 
   logout() {
     localStorage.removeItem('user');
+    localStorage.removeItem('authToken');
     currentUser.set(null);
     this.router.navigateByUrl('/Login');
   }

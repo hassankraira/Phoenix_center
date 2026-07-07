@@ -35,9 +35,10 @@ export class Admin  implements OnInit{
     // داخل الكلاس
 }
   logout() {
-    localStorage.removeItem('user'); // مسح بيانات المستخدم
-    currentUser.set(null);            // إعادة تعيين الـ Signal
-    this.router.navigateByUrl('/Login'); // توجيه المستخدم
+    localStorage.removeItem('user');
+    localStorage.removeItem('authToken');
+    currentUser.set(null);
+    this.router.navigateByUrl('/Login');
   }
 
 }
